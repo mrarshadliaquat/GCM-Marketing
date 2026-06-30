@@ -3,81 +3,92 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>WhatsApp Campaign Dashboard</title>
+  <title>GCM Campaign Pilot</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <main class="app-shell">
-    <header class="topbar">
-      <div class="brand-block">
-        <div class="logo-plate">
-          <img class="company-logo" src="assets/gcm-logo.svg" alt="Gulf Computer Mall">
-        </div>
+  <div class="product-frame">
+    <aside class="sidebar" aria-label="Main navigation">
+      <div class="sidebar-brand">
+        <img class="sidebar-logo" src="assets/gcm-logo.svg" alt="Gulf Computer Mall">
         <div>
-          <p class="eyebrow">Gulf Computer Mall</p>
-          <h1>Campaign Pilot</h1>
-          <p class="muted">Official WhatsApp outreach workspace</p>
+          <strong>GCM</strong>
+          <span>Marketing Suite</span>
         </div>
       </div>
-      <div class="topbar-actions">
-        <button class="ghost" data-action="exportLogs">
-          <span class="icon" aria-hidden="true">DL</span>
-          Export Logs
-        </button>
-        <button class="danger ghost" data-action="clearData">
-          <span class="icon" aria-hidden="true">X</span>
-          Clear Data
-        </button>
-      </div>
-    </header>
 
-    <section class="metrics" aria-label="Campaign report">
-      <div class="metric">
-        <span>Total</span>
-        <strong id="metricTotal">0</strong>
-      </div>
-      <div class="metric">
-        <span>Pending</span>
-        <strong id="metricPending">0</strong>
-      </div>
-      <div class="metric">
-        <span>Opened</span>
-        <strong id="metricOpened">0</strong>
-      </div>
-      <div class="metric">
-        <span>Sent</span>
-        <strong id="metricSent">0</strong>
-      </div>
-      <div class="metric">
-        <span>Failed</span>
-        <strong id="metricFailed">0</strong>
-      </div>
-      <div class="metric">
-        <span>Duplicates</span>
-        <strong id="metricDuplicates">0</strong>
-      </div>
-    </section>
+      <nav class="nav-stack">
+        <a class="nav-item active" href="#dashboard"><span class="nav-icon">DB</span><span>Dashboard</span></a>
+        <a class="nav-item" href="#audience"><span class="nav-icon">AU</span><span>Audience</span></a>
+        <a class="nav-item" href="#campaign"><span class="nav-icon">CP</span><span>Campaign</span></a>
+        <a class="nav-item" href="#contacts"><span class="nav-icon">CT</span><span>Contacts</span></a>
+        <a class="nav-item" href="#reports"><span class="nav-icon">RP</span><span>Reports</span></a>
+      </nav>
 
-    <section class="workspace">
-      <aside class="panel controls-panel">
-        <div class="panel-section">
-          <h2>Add Contacts</h2>
+      <div class="channel-card">
+        <span class="status-dot" aria-hidden="true"></span>
+        <div>
+          <span>WhatsApp Channel</span>
+          <strong>Manual send mode</strong>
+        </div>
+      </div>
+    </aside>
+
+    <main class="app-shell">
+      <header id="dashboard" class="topbar">
+        <div class="brand-block">
+          <div class="logo-plate">
+            <img class="company-logo" src="assets/gcm-logo.svg" alt="Gulf Computer Mall">
+          </div>
+          <div>
+            <p class="eyebrow">Gulf Computer Mall</p>
+            <h1>Campaign Pilot</h1>
+            <p class="muted">Official outreach console</p>
+          </div>
+        </div>
+        <div class="topbar-actions">
+          <button class="ghost" data-action="exportLogs"><span class="icon" aria-hidden="true">DL</span>Export CSV</button>
+          <button class="danger ghost" data-action="clearData"><span class="icon" aria-hidden="true">X</span>Reset</button>
+        </div>
+      </header>
+
+      <section class="command-bar" aria-label="Campaign command center">
+        <div>
+          <span class="section-kicker">Live workspace</span>
+          <h2>Customer reach command center</h2>
+          <div class="workflow-strip" aria-label="Workflow">
+            <span>Import</span>
+            <span>Compose</span>
+            <span>Open</span>
+            <span>Report</span>
+          </div>
+        </div>
+        <div class="command-actions">
+          <button class="primary large-action" data-action="openNext"><span class="icon" aria-hidden="true">WA</span>Open Next</button>
+          <button class="ghost large-action" data-action="startTimer"><span class="icon" aria-hidden="true">20</span>Start Queue</button>
+          <button class="ghost large-action" data-action="stopTimer"><span class="icon" aria-hidden="true">[]</span>Stop</button>
+        </div>
+      </section>
+
+      <section id="reports" class="metrics" aria-label="Campaign report">
+        <div class="metric"><span>Total audience</span><strong id="metricTotal">0</strong></div>
+        <div class="metric"><span>Waiting</span><strong id="metricPending">0</strong></div>
+        <div class="metric"><span>Opened</span><strong id="metricOpened">0</strong></div>
+        <div class="metric"><span>Sent</span><strong id="metricSent">0</strong></div>
+        <div class="metric"><span>Failed</span><strong id="metricFailed">0</strong></div>
+        <div class="metric"><span>Duplicates</span><strong id="metricDuplicates">0</strong></div>
+      </section>
+
+      <section class="builder-grid">
+        <section id="audience" class="panel audience-panel">
+          <div class="panel-heading">
+            <span class="section-kicker">Audience</span>
+            <h2>Add contacts</h2>
+          </div>
           <div class="import-grid">
-            <label class="file-button">
-              <input id="csvInput" type="file" accept=".csv,text/csv">
-              <span class="icon" aria-hidden="true">+</span>
-              CSV
-            </label>
-            <label class="file-button">
-              <input id="txtInput" type="file" accept=".txt,text/plain">
-              <span class="icon" aria-hidden="true">+</span>
-              TXT
-            </label>
-            <label class="file-button">
-              <input id="vcfInput" type="file" accept=".vcf,text/vcard,text/x-vcard">
-              <span class="icon" aria-hidden="true">+</span>
-              VCF
-            </label>
+            <label class="file-button"><input id="csvInput" type="file" accept=".csv,text/csv"><span class="icon" aria-hidden="true">+</span>CSV</label>
+            <label class="file-button"><input id="txtInput" type="file" accept=".txt,text/plain"><span class="icon" aria-hidden="true">+</span>TXT</label>
+            <label class="file-button"><input id="vcfInput" type="file" accept=".vcf,text/vcard,text/x-vcard"><span class="icon" aria-hidden="true">+</span>VCF</label>
           </div>
           <div class="manual-form">
             <input id="manualName" type="text" placeholder="Customer name">
@@ -85,54 +96,56 @@
               <input id="manualCountry" type="text" inputmode="numeric" placeholder="Code">
               <input id="manualPhone" type="text" inputmode="tel" placeholder="Phone number">
             </div>
-            <button class="primary" data-action="addManual">
-              <span class="icon" aria-hidden="true">+</span>
-              Add Contact
-            </button>
+            <button class="primary" data-action="addManual"><span class="icon" aria-hidden="true">+</span>Add Contact</button>
           </div>
-        </div>
+        </section>
 
-        <div class="panel-section">
-          <h2>Message</h2>
-          <input id="businessName" type="text" placeholder="Business name">
-          <input id="offerText" type="text" placeholder="Offer">
-          <textarea id="messageTemplate" rows="5" spellcheck="true"></textarea>
+        <section id="campaign" class="panel composer-panel">
+          <div class="panel-heading">
+            <span class="section-kicker">Message studio</span>
+            <h2>Campaign message</h2>
+          </div>
+          <div class="field-grid">
+            <input id="businessName" type="text" placeholder="Business name">
+            <input id="offerText" type="text" placeholder="Offer">
+          </div>
+          <textarea id="messageTemplate" rows="6" spellcheck="true"></textarea>
           <div class="token-row">
             <button class="ghost small" data-token="{{name}}">{{name}}</button>
             <button class="ghost small" data-token="{{business}}">{{business}}</button>
             <button class="ghost small" data-token="{{offer}}">{{offer}}</button>
           </div>
-        </div>
+        </section>
 
-        <div class="panel-section">
-          <h2>Open Messages</h2>
+        <section class="panel delivery-panel">
+          <div class="panel-heading">
+            <span class="section-kicker">Delivery queue</span>
+            <h2>Open messages</h2>
+          </div>
           <div class="timer-row">
-            <label for="timerSeconds">Seconds</label>
+            <label for="timerSeconds">Delay seconds</label>
             <input id="timerSeconds" type="number" min="5" max="3600" step="1" value="20">
           </div>
           <div class="button-stack">
-            <button class="primary" data-action="openNext">
-              <span class="icon" aria-hidden="true">></span>
-              Open WhatsApp Message
-            </button>
-            <button data-action="startTimer">
-              <span class="icon" aria-hidden="true">20</span>
-              Start Timer
-            </button>
-            <button class="ghost" data-action="stopTimer">
-              <span class="icon" aria-hidden="true">[]</span>
-              Stop Timer
-            </button>
+            <button class="primary" data-action="openNext"><span class="icon" aria-hidden="true">WA</span>Open WhatsApp</button>
+            <button data-action="startTimer"><span class="icon" aria-hidden="true">20</span>Start Queue</button>
+            <button class="ghost" data-action="stopTimer"><span class="icon" aria-hidden="true">[]</span>Stop Queue</button>
           </div>
-          <div class="timer-status" id="timerStatus">Timer stopped</div>
-          <p class="micro-note">The final Send button is inside WhatsApp.</p>
-        </div>
-      </aside>
+          <div class="timer-status" id="timerStatus">Queue stopped</div>
+          <div class="compliance-row"><span>Opt-in list</span><span>Manual send</span></div>
+        </section>
+      </section>
 
-      <section class="main-panel">
-        <div class="tabs" role="tablist" aria-label="Views">
-          <button class="tab active" data-view="contacts" role="tab" aria-selected="true">Contacts</button>
-          <button class="tab" data-view="logs" role="tab" aria-selected="false">Logs</button>
+      <section id="contacts" class="main-panel">
+        <div class="table-header">
+          <div>
+            <span class="section-kicker">Workspace</span>
+            <h2>Contacts and activity</h2>
+          </div>
+          <div class="tabs" role="tablist" aria-label="Views">
+            <button class="tab active" data-view="contacts" role="tab" aria-selected="true">Contacts</button>
+            <button class="tab" data-view="logs" role="tab" aria-selected="false">Logs</button>
+          </div>
         </div>
 
         <div class="toolbar">
@@ -148,20 +161,17 @@
             <option value="Failed">Failed</option>
             <option value="Do not send">Do not send</option>
           </select>
-          <button class="ghost" data-action="cleanDuplicates">
-            <span class="icon" aria-hidden="true">=</span>
-            Clean Duplicates
-          </button>
+          <button class="ghost" data-action="cleanDuplicates"><span class="icon" aria-hidden="true">=</span>Remove Duplicates</button>
         </div>
 
         <div id="contactsView" class="table-wrap">
           <table>
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Number</th>
+                <th>Customer</th>
+                <th>WhatsApp</th>
                 <th>Status</th>
-                <th>Last Action</th>
+                <th>Last action</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -184,8 +194,8 @@
           </table>
         </div>
       </section>
-    </section>
-  </main>
+    </main>
+  </div>
 
   <template id="emptyContactsTemplate">
     <tr>
