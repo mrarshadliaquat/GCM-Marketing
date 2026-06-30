@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1134 576" role="img" aria-labelledby="title desc">
+  <title id="title">Gulf Computer Mall logo</title>
+  <desc id="desc">GCM Gulf Computer Mall official-style mark</desc>
+  <rect width="1134" height="576" fill="#fff"/>
+  <path d="M171 160 C245 286 386 270 526 260" fill="none" stroke="#050505" stroke-width="11" stroke-linecap="round"/>
+  <g fill="#00733f" font-family="Arial Black, Arial, sans-serif" font-size="292" font-weight="900">
+    <text x="174" y="228">G</text>
+    <text x="442" y="228">C</text>
+    <text x="700" y="228">M</text>
+  </g>
+  <g fill="#050505" stroke="#fff" stroke-width="2">
+    <circle cx="545" cy="261" r="8"/>
+    <circle cx="566" cy="258" r="9"/>
+    <circle cx="587" cy="253" r="10"/>
+    <circle cx="613" cy="245" r="12"/>
+    <circle cx="643" cy="235" r="14"/>
+    <circle cx="678" cy="222" r="16"/>
+    <circle cx="718" cy="205" r="18"/>
+    <circle cx="762" cy="183" r="20"/>
+    <circle cx="808" cy="154" r="24"/>
+    <circle cx="855" cy="121" r="27"/>
+    <circle cx="895" cy="81" r="29"/>
+    <circle cx="935" cy="26" r="25"/>
+  </g>
+  <text x="565" y="405" text-anchor="middle" direction="rtl" unicode-bidi="bidi-override"
+        fill="#050505" font-family="Tahoma, Arial, sans-serif" font-size="94" font-weight="700">سوق الخليج للكمبيوتر</text>
+  <text x="4" y="544" fill="#050505" font-family="Georgia, Times New Roman, serif" font-size="110" font-style="italic">Gulf Computer Mall</text>
+</svg>
