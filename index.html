@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WhatsApp Campaign Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="brand-block">
+        <div class="brand-mark" aria-hidden="true">
+          <span></span>
+        </div>
+        <div>
+          <h1>Campaign Pilot</h1>
+          <p class="muted">WhatsApp outreach workspace</p>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <button class="ghost" data-action="exportLogs">
+          <span class="icon" aria-hidden="true">DL</span>
+          Export Logs
+        </button>
+        <button class="danger ghost" data-action="clearData">
+          <span class="icon" aria-hidden="true">X</span>
+          Clear Data
+        </button>
+      </div>
+    </header>
+
+    <section class="metrics" aria-label="Campaign report">
+      <div class="metric">
+        <span>Total</span>
+        <strong id="metricTotal">0</strong>
+      </div>
+      <div class="metric">
+        <span>Pending</span>
+        <strong id="metricPending">0</strong>
+      </div>
+      <div class="metric">
+        <span>Opened</span>
+        <strong id="metricOpened">0</strong>
+      </div>
+      <div class="metric">
+        <span>Sent</span>
+        <strong id="metricSent">0</strong>
+      </div>
+      <div class="metric">
+        <span>Failed</span>
+        <strong id="metricFailed">0</strong>
+      </div>
+      <div class="metric">
+        <span>Duplicates</span>
+        <strong id="metricDuplicates">0</strong>
+      </div>
+    </section>
+
+    <section class="workspace">
+      <aside class="panel controls-panel">
+        <div class="panel-section">
+          <h2>Add Contacts</h2>
+          <div class="import-grid">
+            <label class="file-button">
+              <input id="csvInput" type="file" accept=".csv,text/csv">
+              <span class="icon" aria-hidden="true">+</span>
+              CSV
+            </label>
+            <label class="file-button">
+              <input id="txtInput" type="file" accept=".txt,text/plain">
+              <span class="icon" aria-hidden="true">+</span>
+              TXT
+            </label>
+            <label class="file-button">
+              <input id="vcfInput" type="file" accept=".vcf,text/vcard,text/x-vcard">
+              <span class="icon" aria-hidden="true">+</span>
+              VCF
+            </label>
+          </div>
+          <div class="manual-form">
+            <input id="manualName" type="text" placeholder="Customer name">
+            <div class="phone-row">
+              <input id="manualCountry" type="text" inputmode="numeric" placeholder="Code">
+              <input id="manualPhone" type="text" inputmode="tel" placeholder="Phone number">
+            </div>
+            <button class="primary" data-action="addManual">
+              <span class="icon" aria-hidden="true">+</span>
+              Add Contact
+            </button>
+          </div>
+        </div>
+
+        <div class="panel-section">
+          <h2>Message</h2>
+          <input id="businessName" type="text" placeholder="Business name">
+          <input id="offerText" type="text" placeholder="Offer">
+          <textarea id="messageTemplate" rows="5" spellcheck="true"></textarea>
+          <div class="token-row">
+            <button class="ghost small" data-token="{{name}}">{{name}}</button>
+            <button class="ghost small" data-token="{{business}}">{{business}}</button>
+            <button class="ghost small" data-token="{{offer}}">{{offer}}</button>
+          </div>
+        </div>
+
+        <div class="panel-section">
+          <h2>Open Messages</h2>
+          <div class="timer-row">
+            <label for="timerSeconds">Seconds</label>
+            <input id="timerSeconds" type="number" min="5" max="3600" step="1" value="20">
+          </div>
+          <div class="button-stack">
+            <button class="primary" data-action="openNext">
+              <span class="icon" aria-hidden="true">></span>
+              Open WhatsApp Message
+            </button>
+            <button data-action="startTimer">
+              <span class="icon" aria-hidden="true">20</span>
+              Start Timer
+            </button>
+            <button class="ghost" data-action="stopTimer">
+              <span class="icon" aria-hidden="true">[]</span>
+              Stop Timer
+            </button>
+          </div>
+          <div class="timer-status" id="timerStatus">Timer stopped</div>
+          <p class="micro-note">The final Send button is inside WhatsApp.</p>
+        </div>
+      </aside>
+
+      <section class="main-panel">
+        <div class="tabs" role="tablist" aria-label="Views">
+          <button class="tab active" data-view="contacts" role="tab" aria-selected="true">Contacts</button>
+          <button class="tab" data-view="logs" role="tab" aria-selected="false">Logs</button>
+        </div>
+
+        <div class="toolbar">
+          <div class="search-wrap">
+            <span class="icon" aria-hidden="true">?</span>
+            <input id="searchInput" type="search" placeholder="Search contacts">
+          </div>
+          <select id="statusFilter" aria-label="Status filter">
+            <option value="all">All statuses</option>
+            <option value="Pending">Pending</option>
+            <option value="Opened">Opened</option>
+            <option value="Sent">Sent</option>
+            <option value="Failed">Failed</option>
+            <option value="Do not send">Do not send</option>
+          </select>
+          <button class="ghost" data-action="cleanDuplicates">
+            <span class="icon" aria-hidden="true">=</span>
+            Clean Duplicates
+          </button>
+        </div>
+
+        <div id="contactsView" class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Number</th>
+                <th>Status</th>
+                <th>Last Action</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="contactsBody"></tbody>
+          </table>
+        </div>
+
+        <div id="logsView" class="table-wrap hidden">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Name</th>
+                <th>Number</th>
+                <th>Result</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody id="logsBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <template id="emptyContactsTemplate">
+    <tr>
+      <td colspan="5" class="empty-state">No contacts yet. Import CSV, TXT, VCF, or add a contact manually.</td>
+    </tr>
+  </template>
+
+  <template id="emptyLogsTemplate">
+    <tr>
+      <td colspan="5" class="empty-state">No logs yet.</td>
+    </tr>
+  </template>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
