@@ -57,6 +57,10 @@ button,
   white-space: nowrap;
 }
 
+a {
+  color: inherit;
+}
+
 button:hover,
 .file-button:hover {
   border-color: #8ccbad;
@@ -295,7 +299,7 @@ h2 {
 }
 
 .topbar-actions,
-.command-actions {
+.command-summary {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
@@ -322,7 +326,8 @@ h2 {
 }
 
 .workflow-strip span,
-.compliance-row span {
+.compliance-row span,
+.quick-link {
   min-height: 28px;
   border-radius: 999px;
   padding: 6px 10px;
@@ -330,6 +335,30 @@ h2 {
   background: var(--brand-soft);
   font-size: 12px;
   font-weight: 800;
+}
+
+.quick-link {
+  min-height: 38px;
+  border: 1px solid #cfe6da;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.quick-link:hover {
+  border-color: #8ccbad;
+  background: #f7fbf9;
+}
+
+.primary-link {
+  border-color: var(--brand);
+  color: #ffffff;
+  background: var(--brand);
+}
+
+.primary-link:hover {
+  border-color: var(--brand-dark);
+  background: var(--brand-dark);
 }
 
 .metrics {
@@ -460,6 +489,51 @@ textarea:focus {
   margin-top: 9px;
 }
 
+.mode-selector {
+  display: grid;
+  gap: 9px;
+  margin-bottom: 12px;
+}
+
+.mode-option {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 11px;
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  gap: 10px;
+  align-items: start;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.mode-option:has(input:checked) {
+  border-color: #7acaa5;
+  background: var(--brand-soft);
+}
+
+.mode-option input {
+  width: 16px;
+  min-height: 16px;
+  margin: 2px 0 0;
+  accent-color: var(--brand);
+}
+
+.mode-option strong,
+.mode-option small {
+  display: block;
+}
+
+.mode-option strong {
+  font-size: 14px;
+}
+
+.mode-option small {
+  margin-top: 3px;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
 .timer-row {
   display: grid;
   grid-template-columns: 1fr 120px;
@@ -484,6 +558,13 @@ textarea:focus {
   background: var(--brand-soft);
   color: var(--brand-dark);
   font-weight: 800;
+}
+
+.delivery-note {
+  margin: 9px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
 }
 
 .compliance-row {
@@ -717,12 +798,12 @@ td {
   }
 
   .topbar-actions,
-  .command-actions {
+  .command-summary {
     justify-content: stretch;
   }
 
   .topbar-actions button,
-  .command-actions button {
+  .command-summary .quick-link {
     flex: 1;
   }
 
