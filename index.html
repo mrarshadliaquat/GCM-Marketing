@@ -120,21 +120,21 @@
         <section id="delivery" class="panel delivery-panel">
           <div class="panel-heading">
             <span class="section-kicker">Delivery queue</span>
-            <h2>Manual & auto open</h2>
+            <h2>WhatsApp send queue</h2>
           </div>
           <div class="mode-selector" role="radiogroup" aria-label="Delivery mode">
             <label class="mode-option">
               <input type="radio" name="deliveryMode" value="manual" checked>
               <span>
                 <strong>Manual send</strong>
-                <small>Open one chat, review, then press Send in WhatsApp.</small>
+                <small>Open one chat, then press Send in WhatsApp.</small>
               </span>
             </label>
             <label class="mode-option">
               <input type="radio" name="deliveryMode" value="autoOpen">
               <span>
                 <strong>Auto open queue</strong>
-                <small>Open next prepared chat every delay seconds.</small>
+                <small>Opens next chat by timer. WhatsApp Send stays manual.</small>
               </span>
             </label>
           </div>
@@ -144,11 +144,11 @@
           </div>
           <div class="button-stack">
             <button class="primary" data-action="openNext"><span class="icon" aria-hidden="true">WA</span>Open Next WhatsApp</button>
-            <button data-action="startTimer"><span class="icon" aria-hidden="true">20</span>Start Auto Queue</button>
+            <button data-action="startTimer"><span class="icon" aria-hidden="true">20</span>Start Auto Open</button>
             <button class="ghost" data-action="stopTimer"><span class="icon" aria-hidden="true">[]</span>Stop Queue</button>
           </div>
-          <div class="timer-status" id="timerStatus">Queue stopped</div>
-          <p class="delivery-note">Auto queue uses one WhatsApp tab and loads the next contact by timer. Final send stays inside WhatsApp.</p>
+          <div class="timer-status" id="timerStatus">Ready. This app opens WhatsApp chats; Send is manual in WhatsApp.</div>
+          <p class="delivery-note">Browser security does not allow this website to press WhatsApp Send. For true auto-send, use official WhatsApp Business API.</p>
           <div class="compliance-row"><span>Opt-in list</span><span>Manual send</span><span>Auto open queue</span></div>
         </section>
       </section>
