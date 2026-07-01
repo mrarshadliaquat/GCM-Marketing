@@ -330,7 +330,7 @@
     if (targetWindow) {
       if (targetWindow.closed) {
         stopTimer();
-        showToast("Queue tab was closed. Start Auto Queue again.");
+        showToast("Queue tab was closed. Start Auto Open again.");
         return false;
       }
       targetWindow.location.href = url;
@@ -365,7 +365,7 @@
 
     queueWindow = window.open("about:blank", "gcmWhatsappQueue");
     if (!queueWindow) {
-      showToast("Popup blocked. Allow popups for this site, then start Auto Queue again.");
+      showToast("Popup blocked. Allow popups for this site, then start Auto Open again.");
       return;
     }
 
@@ -391,12 +391,12 @@
     countdownId = null;
     countdown = 0;
     queueWindow = null;
-    els.timerStatus.textContent = "Queue stopped. Use Open Next for manual send, or Start Auto Queue for timed opening.";
+    els.timerStatus.textContent = "Queue stopped. This app opens WhatsApp chats; Send is manual in WhatsApp.";
     if (showMessage) showToast("Queue stopped.");
   }
 
   function updateTimerStatus() {
-    els.timerStatus.textContent = `Auto queue running. Next WhatsApp opens in ${Math.max(0, countdown)} second(s).`;
+    els.timerStatus.textContent = `Auto open running. Next WhatsApp chat opens in ${Math.max(0, countdown)} second(s). Send stays manual.`;
   }
 
   function markFailed(id) {
