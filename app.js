@@ -9,7 +9,8 @@
       businessName: "Your Business",
       offerText: "20% discount this week",
       messageTemplate: "Hello {{name}}, this is {{business}}. Offer: {{offer}}. Reply STOP if you do not want updates.",
-      timerSeconds: 20
+      timerSeconds: 20,
+      deliveryMode: "manual"
     },
     duplicates: 0
   };
@@ -19,6 +20,7 @@
   let countdownId = null;
   let countdown = 0;
   let activeView = "contacts";
+  let queueWindow = null;
 
   const els = {
     metricTotal: document.getElementById("metricTotal"),
@@ -43,6 +45,7 @@
     offerText: document.getElementById("offerText"),
     messageTemplate: document.getElementById("messageTemplate"),
     timerSeconds: document.getElementById("timerSeconds"),
+    deliveryModes: document.querySelectorAll('input[name="deliveryMode"]'),
     timerStatus: document.getElementById("timerStatus"),
     searchInput: document.getElementById("searchInput"),
     statusFilter: document.getElementById("statusFilter"),
@@ -62,6 +65,7 @@
     els.offerText.value = state.settings.offerText;
     els.messageTemplate.value = state.settings.messageTemplate;
     els.timerSeconds.value = state.settings.timerSeconds;
+    setDeliveryMode(state.settings.deliveryMode || "manual");
   }
 
   function attachEvents() {
@@ -76,6 +80,9 @@
 
     [els.businessName, els.offerText, els.messageTemplate, els.timerSeconds].forEach((field) => {
       field.addEventListener("input", saveSettingsFromForm);
+    });
+    els.deliveryModes.forEach((field) => {
+      field.addEventListener("change", saveSettingsFromForm);
     });
 
     els.searchInput.addEventListener("input", renderContacts);
@@ -305,26 +312,36 @@
     showToast(`${removed} duplicate contact(s) removed.`);
   }
 
-  function openNext() {
-    const contact = state.contacts.find((item) => item.status === "Pending" || !item.status);
+  function openNext(targetWindow = null) {
+    const contact = nextPendingContact();
     if (!contact) {
       stopTimer();
       showToast("No pending contacts found.");
       return false;
     }
-    return openContact(contact.id);
+    return openContact(contact.id, targetWindow);
   }
 
-  function openContact(id) {
+  function openContact(id, targetWindow = null) {
     const contact = findContact(id);
     if (!contact) return false;
 
     const url = buildWhatsAppURL(contact);
-    const popup = window.open(url, "_blank", "noopener,noreferrer");
-    if (!popup) {
-      stopTimer();
-      showToast("Popup blocked. Allow popups for this site, then try again.");
-      return false;
+    if (targetWindow) {
+      if (targetWindow.closed) {
+        stopTimer();
+        showToast("Queue tab was closed. Start Auto Queue again.");
+        return false;
+      }
+      targetWindow.location.href = url;
+      targetWindow.focus();
+    } else {
+      const popup = window.open(url, "_blank", "noopener,noreferrer");
+      if (!popup) {
+        stopTimer();
+        showToast("Popup blocked. Allow popups for this site, then try again.");
+        return false;
+      }
     }
 
     contact.status = "Opened";
@@ -338,7 +355,21 @@
 
   function startTimer() {
     stopTimer(false);
-    const opened = openNext();
+    setDeliveryMode("autoOpen");
+    saveSettingsFromForm();
+
+    if (!nextPendingContact()) {
+      showToast("No pending contacts found.");
+      return;
+    }
+
+    queueWindow = window.open("about:blank", "gcmWhatsappQueue");
+    if (!queueWindow) {
+      showToast("Popup blocked. Allow popups for this site, then start Auto Queue again.");
+      return;
+    }
+
+    const opened = openNext(queueWindow);
     if (!opened) return;
     countdown = timerSeconds();
     updateTimerStatus();
@@ -346,7 +377,7 @@
       countdown -= 1;
       updateTimerStatus();
       if (countdown <= 0) {
-        const ok = openNext();
+        const ok = openNext(queueWindow);
         if (!ok) return;
         countdown = timerSeconds();
       }
@@ -359,12 +390,13 @@
     timerId = null;
     countdownId = null;
     countdown = 0;
-    els.timerStatus.textContent = "Timer stopped";
-    if (showMessage) showToast("Timer stopped.");
+    queueWindow = null;
+    els.timerStatus.textContent = "Queue stopped. Use Open Next for manual send, or Start Auto Queue for timed opening.";
+    if (showMessage) showToast("Queue stopped.");
   }
 
   function updateTimerStatus() {
-    els.timerStatus.textContent = `Next message in ${Math.max(0, countdown)} second(s)`;
+    els.timerStatus.textContent = `Auto queue running. Next WhatsApp opens in ${Math.max(0, countdown)} second(s).`;
   }
 
   function markFailed(id) {
@@ -412,7 +444,20 @@
     state.settings.offerText = els.offerText.value;
     state.settings.messageTemplate = els.messageTemplate.value;
     state.settings.timerSeconds = timerSeconds();
+    state.settings.deliveryMode = selectedDeliveryMode();
     saveState();
+  }
+
+  function selectedDeliveryMode() {
+    const selected = Array.from(els.deliveryModes).find((field) => field.checked);
+    return selected ? selected.value : "manual";
+  }
+
+  function setDeliveryMode(mode) {
+    const nextMode = mode === "autoOpen" ? "autoOpen" : "manual";
+    els.deliveryModes.forEach((field) => {
+      field.checked = field.value === nextMode;
+    });
   }
 
   function insertToken(token) {
@@ -483,7 +528,7 @@
         <td class="date-cell"></td>
         <td>
           <div class="row-actions">
-            <button class="small primary" data-action="openContact" data-id="${contact.id}">Open</button>
+            <button class="small primary" data-action="openContact" data-id="${contact.id}">Open WA</button>
             <button class="small ghost" data-action="markSent" data-id="${contact.id}">Sent</button>
             <button class="small ghost" data-action="markFailed" data-id="${contact.id}">Failed</button>
             <button class="small ghost" data-action="skipContact" data-id="${contact.id}">Skip</button>
@@ -599,6 +644,10 @@
     return state.contacts.find((contact) => contact.id === id);
   }
 
+  function nextPendingContact() {
+    return state.contacts.find((item) => item.status === "Pending" || !item.status);
+  }
+
   function logAction(contact, result, notes) {
     state.logs.push({
       date: nowText(),
@@ -667,7 +716,10 @@
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (!saved) return structuredClone(defaultState);
-      return Object.assign(structuredClone(defaultState), JSON.parse(saved));
+      const parsed = JSON.parse(saved);
+      return Object.assign(structuredClone(defaultState), parsed, {
+        settings: Object.assign(structuredClone(defaultState.settings), parsed.settings || {})
+      });
     } catch (error) {
       return structuredClone(defaultState);
     }
